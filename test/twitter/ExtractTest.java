@@ -26,6 +26,10 @@ public class ExtractTest {
     private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
     private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
     private static final Tweet tweet3 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes #hype", d3);
+    private static final Tweet tweet4 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes @alyssa #hype", d3);
+    private static final Tweet tweet5 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes @alyssa @bbitdiddle #hype", d3);
+    private static final Tweet tweet6 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes @Alyssa #hype", d3);
+    private static final Tweet tweet7 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes @alyssa.mit.edu.cn #hype", d3);
     
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -64,6 +68,7 @@ public class ExtractTest {
         assertEquals("expected end", d1, timespan.getEnd());
     }
     
+    @Test
     public void testGetTimespanThreeSametimeBigTweets() {
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2, tweet2));
         
@@ -71,6 +76,7 @@ public class ExtractTest {
         assertEquals("expected end", d2, timespan.getEnd());
     }
     
+    @Test
     public void testGetTimespanThreeSametimeSmallTweets() {
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet1, tweet2));
         
@@ -82,6 +88,46 @@ public class ExtractTest {
     @Test
     public void testGetMentionedUsersNoMention() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet1));
+        
+        assertTrue("expected empty set", mentionedUsers.isEmpty());
+    }
+    
+    @Test
+    public void testGetMentioneddUsersOneMention() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4));
+        
+        assertEquals("expected one name", 1, mentionedUsers.size());
+        assertTrue("expected name alyssa", mentionedUsers.contains("alyssa"));
+    }
+    
+    @Test
+    public void testGetMentioneddUsersTwoMention() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet5));
+        assertEquals("expected two name", 2, mentionedUsers.size());
+        assertTrue("expected name alyssa and bib", mentionedUsers.containsAll(Arrays.asList("alyssa", "bbitdiddle")));
+        
+    }
+    
+    @Test
+    public void testGetMentioneddUsersRepeatMention() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet4));
+        
+        assertEquals("expected one name", 1, mentionedUsers.size());
+        assertTrue("expected name alyssa", mentionedUsers.contains("alyssa"));
+    }
+    
+    @Test
+    public void testGetMentioneddUsersCaseInsensitiveMention() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet6));
+        
+        assertEquals("expected one name", 1, mentionedUsers.size());
+        assertTrue("expected name alyssa", mentionedUsers.contains("alyssa"));
+    }
+
+    
+    @Test
+    public void testGetMentioneddUsersCharAppearMention() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet7));
         
         assertTrue("expected empty set", mentionedUsers.isEmpty());
     }

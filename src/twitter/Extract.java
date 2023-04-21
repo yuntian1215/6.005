@@ -6,10 +6,10 @@ package twitter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.sql.Time;
 import java.time.Instant;
 import java.lang.Long;
 import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * Extract consists of methods that extract information from a list of tweets.
@@ -55,7 +55,30 @@ public class Extract {
      *         include a username at most once.
      */
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Set<String> username = new HashSet<String>();
+        boolean flag = true;
+        for(Tweet tweet : tweets) {
+        	String text = tweet.getText();
+        	int atIndex = text.indexOf("@");
+        	
+        	while(atIndex != -1) {
+	        	int spaceIndex = text.indexOf(" ", atIndex);
+	        	if(spaceIndex > atIndex) {
+	        		String atname = text.substring(atIndex+1, spaceIndex).toLowerCase();
+	        		for(int i = 0; i < atname.length(); i++) {
+	        			flag = true;	
+	        			if(!(Character.isDigit(atname.charAt(i)) || Character.isLowerCase(atname.charAt(i)))) {
+	        				flag = false;
+	        				break;
+	        			}
+	        		}
+	        		if(flag == true)
+	        			username.add(atname);
+	        	}
+	        	atIndex = text.indexOf("@", atIndex + 1);
+        	}
+        }
+        return username;    
     }
 
 }
