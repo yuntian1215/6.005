@@ -3,9 +3,17 @@
  */
 package twitter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import twitter.Extract;
+import twitter.Filter;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -41,7 +49,21 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+    	Map<String, Set<String>> followsGraph = new HashMap<>();
+    	Set<String> followers = new HashSet<>();
+    	
+    	followers.addAll(Extract.getMentionedUsers(tweets));
+    	for(Tweet tweet : tweets) {
+    		followers.add(tweet.getAuthor().toLowerCase());
+    	}
+    	
+    	for (String follower : followers) {
+    		Set<String> followings = new HashSet<>();
+    		followings.addAll(Extract.getMentionedUsers(Filter.writtenBy(tweets, follower)));
+    		followsGraph.put(follower, followings);
+    	}
+    	
+    	return followsGraph;
     }
 
     /**
@@ -54,7 +76,38 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+        Map<String, Long> influence = new HashMap<>(); 
+        
+        for(String followername : followsGraph.keySet()) {
+        	influence.put(followername, (long)0);
+        }
+        
+        for(String followername : followsGraph.keySet()) {
+        	Set<String> followers = new HashSet<>();
+        	followers = followsGraph.get(followername);
+        	
+        	for(String follower : followers) {
+        		influence.put(follower, (influence.get(follower))+1);
+        	}
+        	
+        }
+        
+        List<Map.Entry<String, Long>> sortlist = new ArrayList<>(influence.entrySet());
+        
+        Collections.sort(sortlist, new Comparator<Map.Entry<String, Long>>() {
+            @Override
+            public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        
+        Map<String, Long> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Long> entry : sortlist) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        
+        List<String> result = new ArrayList<>(sortedMap.keySet());
+        return result;
     }
 
 }

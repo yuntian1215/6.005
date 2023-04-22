@@ -59,12 +59,27 @@ public class Extract {
         boolean flag = true;
         for(Tweet tweet : tweets) {
         	String text = tweet.getText();
+        	char lastChar = text.charAt(text.length() - 1);
         	int atIndex = text.indexOf("@");
         	
         	while(atIndex != -1) {
 	        	int spaceIndex = text.indexOf(" ", atIndex);
+	        	String atname;
+	        	if(spaceIndex == -1) {
+	        		atname = text.substring(atIndex + 1).toLowerCase();
+	        		for(int i = 0; i < atname.length(); i++) {
+	        			flag = true;	
+	        			if(!(Character.isDigit(atname.charAt(i)) || Character.isLowerCase(atname.charAt(i)))) {
+	        				flag = false;
+	        				break;
+	        			}
+	        		}
+	        		if(flag == true)
+	        			username.add(atname);
+	        	}
+	        	
 	        	if(spaceIndex > atIndex) {
-	        		String atname = text.substring(atIndex+1, spaceIndex).toLowerCase();
+	        		atname = text.substring(atIndex + 1, spaceIndex).toLowerCase();
 	        		for(int i = 0; i < atname.length(); i++) {
 	        			flag = true;	
 	        			if(!(Character.isDigit(atname.charAt(i)) || Character.isLowerCase(atname.charAt(i)))) {

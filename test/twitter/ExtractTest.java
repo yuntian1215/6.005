@@ -26,10 +26,11 @@ public class ExtractTest {
     private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
     private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
     private static final Tweet tweet3 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes #hype", d3);
-    private static final Tweet tweet4 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes @alyssa #hype", d3);
-    private static final Tweet tweet5 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes @alyssa @bbitdiddle #hype", d3);
-    private static final Tweet tweet6 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes @Alyssa #hype", d3);
-    private static final Tweet tweet7 = new Tweet(3, "bbitdiddle", "rivest talk in 30 minutes @alyssa.mit.edu.cn #hype", d3);
+    private static final Tweet tweet4 = new Tweet(4, "bbitdiddle", "rivest talk in 30 minutes @alyssa #hype", d3);
+    private static final Tweet tweet5 = new Tweet(5, "bbitdiddle", "rivest talk in 30 minutes @alyssa @bbitdiddle #hype", d3);
+    private static final Tweet tweet6 = new Tweet(6, "bbitdiddle", "rivest talk in 30 minutes @Alyssa #hype", d3);
+    private static final Tweet tweet7 = new Tweet(7, "bbitdiddle", "rivest talk in 30 minutes @alyssa.mit.edu.cn #hype", d3);
+    private static final Tweet tweet8 = new Tweet(8, "xiaoMing", "rivest talk in 30 minutes @zhangzhipeng", d2);
     
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -130,6 +131,14 @@ public class ExtractTest {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet7));
         
         assertTrue("expected empty set", mentionedUsers.isEmpty());
+    }
+    
+    @Test
+    public void testGetMentioneddUsersBugMention() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet8));
+        
+        assertTrue("expected name zhangzhipeng", mentionedUsers.contains("zhangzhipeng"));
+        assertEquals("expected one name", 1, mentionedUsers.size());
     }
 
     /*

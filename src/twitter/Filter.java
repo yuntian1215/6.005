@@ -31,7 +31,7 @@ public class Filter {
         List<Tweet> result = new ArrayList<Tweet>();
         
         for(Tweet tweet : tweets) {
-        	if(tweet.getAuthor().compareTo(username) == 0) {
+        	if(tweet.getAuthor().toLowerCase().compareTo(username) == 0) {
         		result.add(tweet);
         	}
         }
@@ -90,8 +90,8 @@ public class Filter {
     			}
     				
     		}
-    		
-    		result.add(tweet);
+    		if(flag)
+    			result.add(tweet);
     	}
     	
     	return result;
