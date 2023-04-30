@@ -7,7 +7,7 @@ grammar abcBody;
 import Configuration;
 
 root : abcline+ EOF;
-abcline : element* NEWLINE | midtunefield | comment;
+abcline : element* NEWLINE | fieldvoice | comment;
 element : noteelement | tupletelement | barline | nthrepeat; 
 
 noteelement : note | multinote;
@@ -34,7 +34,6 @@ multinote : '[' note+ ']';
 barline : '|' | '||' | '[|' | '|]' | ':|' | '|:';
 nthrepeat : '[1' | '[2';
 
-midtunefield : fieldvoice;
 fieldvoice : 'V:' (STRING | DIGIT)+ endofline;
 
 comment : '%' STRING NEWLINE;

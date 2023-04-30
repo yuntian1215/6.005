@@ -10,30 +10,18 @@ root : fieldnumber comment* fieldtitle otherfields* fieldkey EOF;
 
 fieldnumber : 'X:' DIGIT+ endofline;
 fieldtitle : 'T:' (STRING | DIGIT)+ endofline;
-otherfields : fieldcomposer | fielddefaultlength | fieldmeter | fieldtempo | fieldvoice | comment;
+otherfields : (fieldcomposer | fielddefaultlength | fieldmeter | fieldtempo | fieldvoice | comment) endofline;
 
-fieldcomposer : 'C:' STRING+ endofline;
-fielddefaultlength : 'L:' notelengthstrict endofline;
-fieldmeter : 'M:' meter endofline;
-fieldtempo : 'Q:' tempo endofline;
-fieldvoice : 'V:' (STRING | DIGIT)+ endofline;
+fieldcomposer : 'C:' STRING+ ;
+fielddefaultlength : 'L:' DIGIT+ '/' DIGIT+ ;
+fieldmeter : 'M:' 'C' | 'C|' | (DIGIT+ '/' DIGIT+) ;
+fieldtempo : 'Q:' (DIGIT+ '/' DIGIT+) '=' DIGIT+ ;
+fieldvoice : 'V:' (STRING | DIGIT)+ ;
 
-fieldkey : 'K:' key endofline;
+fieldkey : 'K:' ('C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B'
+        | 'c' | 'd' | 'e' | 'f' | 'g' | 'a' | 'b') ('#'|'b')? ('M' | 'm')? ;
 
-notelengthstrict : DIGIT+ '/' DIGIT+;
 
-key : keynote modeminor?;
-keynote : basenote keyaccidental?;
-keyaccidental : '#' | 'b';
-modeminor : 'm';
-
-basenote : 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B'
-        | 'c' | 'd' | 'e' | 'f' | 'g' | 'a' | 'b';
-
-meter : 'C' | 'C|' | meterfraction;
-meterfraction : DIGIT+ '/' DIGIT+;
-
-tempo : meterfraction '=' DIGIT+;
 
 comment : '%' STRING NEWLINE;
 endofline : comment | NEWLINE;

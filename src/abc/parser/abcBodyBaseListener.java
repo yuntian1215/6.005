@@ -223,18 +223,6 @@ public class abcBodyBaseListener implements abcBodyListener {
    *
    * <p>The default implementation does nothing.</p>
    */
-  @Override public void enterMidtunefield(abcBodyParser.MidtunefieldContext ctx) { }
-  /**
-   * {@inheritDoc}
-   *
-   * <p>The default implementation does nothing.</p>
-   */
-  @Override public void exitMidtunefield(abcBodyParser.MidtunefieldContext ctx) { }
-  /**
-   * {@inheritDoc}
-   *
-   * <p>The default implementation does nothing.</p>
-   */
   @Override public void enterFieldvoice(abcBodyParser.FieldvoiceContext ctx) { }
   /**
    * {@inheritDoc}

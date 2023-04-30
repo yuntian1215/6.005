@@ -181,16 +181,6 @@ public interface abcBodyListener extends ParseTreeListener {
    */
   void exitNthrepeat(abcBodyParser.NthrepeatContext ctx);
   /**
-   * Enter a parse tree produced by {@link abcBodyParser#midtunefield}.
-   * @param ctx the parse tree
-   */
-  void enterMidtunefield(abcBodyParser.MidtunefieldContext ctx);
-  /**
-   * Exit a parse tree produced by {@link abcBodyParser#midtunefield}.
-   * @param ctx the parse tree
-   */
-  void exitMidtunefield(abcBodyParser.MidtunefieldContext ctx);
-  /**
    * Enter a parse tree produced by {@link abcBodyParser#fieldvoice}.
    * @param ctx the parse tree
    */
