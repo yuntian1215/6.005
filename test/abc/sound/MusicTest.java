@@ -21,8 +21,9 @@ public class MusicTest{
 	 * Concat
 	 * 
 	 * play():
-	 * # Note = 1, > 1
-	 * # Rest = 1, > 1
+	 * # Note
+	 * # Rest
+	 * # Chord
 	 * Concat
 	 * 
 	 * equals() and hashCode():
@@ -43,6 +44,172 @@ public class MusicTest{
 	public void testAssertionsEnabled() {
 		assert false; // make sure assertions are enabled with VM argument: -ea
 	}
+	
+	// tests for duration
+	// covers Note Rest Chord
+	@Test
+    public void testDurationNRC() {
+		Note n1 = new Note(1, new Pitch('C'));
+		Note n2 = new Note(1, new Pitch('E'));
+		Note n3 = new Note(1, new Pitch('G'));
+		
+		Chord c1 = new Chord(Arrays.asList(n1, n2, n3));
+		
+		Rest m1 = new Rest(2);
+		
+		assertTrue("expected to be equal", n1.duration() == 1.0);
+		assertTrue("expected to be equal", c1.duration() == 1.0);
+		assertTrue("expected to be equal", m1.duration() == 2.0);
+	}
+	
+	// covers Note Rest Concat
+	@Test
+    public void testDurationConcat() {
+		Note n1 = new Note(1, new Pitch('C'));
+		Note n2 = new Note(1, new Pitch('E'));
+		Note n3 = new Note(1, new Pitch('G'));
+		
+		Chord c1 = new Chord(Arrays.asList(n1, n2, n3));
+		
+		Rest m1 = new Rest(2);
+		
+		Concat a1 = new Concat(n1, c1);
+		Concat a2 = new Concat(a1, m1);
+		
+		
+		assertTrue("expected to be equal", a1.duration() == 2.0);
+		assertTrue("expected to be equal", a2.duration() == 4.0);
+	}
+	
+	// tests for play()
+	// covers Note
+	@Test
+    public void testPlayNote() {
+		try {
+			SequencePlayer player = new SequencePlayer(100, 2);
+		
+			Note n1 = new Note(1, new Pitch('C'));
+			Note n2 = new Note(2, new Pitch('C'));
+			Note n3 = new Note(1, new Pitch('D'));
+			
+			n1.play(player, 0);
+			n2.play(player, 1);
+			n3.play(player, 3);
+			System.out.println(player);
+			player.play();
+			
+	    	try {
+				System.in.read();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}catch (MidiUnavailableException mue) {
+			mue.printStackTrace();
+		} catch (InvalidMidiDataException imde) {
+			imde.printStackTrace();
+		}
+	}
+	
+	// covers Rest
+	@Test
+    public void testPlayRest() {
+		try {
+			SequencePlayer player = new SequencePlayer(100, 2);
+		
+			Note n1 = new Note(1, new Pitch('C'));
+			Rest n2 = new Rest(2);
+			Note n3 = new Note(1, new Pitch('G'));
+			
+			n1.play(player, 0);
+			n2.play(player, 1);
+			n3.play(player, 3);
+			System.out.println(player);
+			player.play();
+			
+	    	try {
+				System.in.read();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}catch (MidiUnavailableException mue) {
+			mue.printStackTrace();
+		} catch (InvalidMidiDataException imde) {
+			imde.printStackTrace();
+		}
+	}
+	
+	// covers Chord
+	@Test
+	public void testPlayChord() {
+		try {
+			SequencePlayer player = new SequencePlayer(100, 2);
+			
+			Note n1 = new Note(1, new Pitch('C'));
+			Note n2 = new Note(1, new Pitch('E'));
+			Note n3 = new Note(1, new Pitch('G'));
+			
+			Chord c1 = new Chord(Arrays.asList(n1, n2, n3));
+				
+			c1.play(player, 0);
+			n1.play(player, 1);
+			n2.play(player, 1);
+			n3.play(player, 1);
+			c1.play(player, 2);
+			n2.play(player, 3);
+			
+			System.out.println(player);
+			player.play();
+				
+		    try {
+				System.in.read();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}catch (MidiUnavailableException mue) {
+			mue.printStackTrace();
+		} catch (InvalidMidiDataException imde) {
+			imde.printStackTrace();
+		}
+	}
+	
+	// covers Concat
+	@Test
+	public void testPlayConcat() {
+		try {
+			SequencePlayer player = new SequencePlayer(100, 2);
+			Note n1 = new Note(1, new Pitch('C'));
+			Note n2 = new Note(1, new Pitch('E'));
+			Note n3 = new Note(1, new Pitch('G'));
+			Note n4 = new Note(1, new Pitch('B'));
+			
+			Chord c1 = new Chord(Arrays.asList(n1, n2, n3));
+			Chord c2 = new Chord(Arrays.asList(n1, n2, n3, n4));
+			
+			Rest m1 = new Rest(1);
+			
+			Concat a1 = new Concat(c1, c2);
+			Concat a2 = new Concat(a1, m1);
+			Concat a3 = new Concat(a2, c1);
+			
+			a3.play(player, 0);
+			
+			System.out.println(player);
+			player.play();
+				
+		    try {
+				System.in.read();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}catch (MidiUnavailableException mue) {
+			mue.printStackTrace();
+		} catch (InvalidMidiDataException imde) {
+			imde.printStackTrace();
+		}
+
+	}
+    	
+    	
 	
 	// tests for equals() and hashCode()
 	// covers Note
