@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import abc.parser.abcHeaderListener;
 import abc.parser.abcHeaderParser;
 
-public class MakeHeader1 implements abcHeaderListener {
+public class MakeHeader implements abcHeaderListener {
 	
 	private Map<String, String> header = new HashMap<>();
 	
