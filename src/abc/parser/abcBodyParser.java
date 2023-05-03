@@ -177,7 +177,9 @@ public class abcBodyParser extends Parser {
   }
 
   public static class AbclineContext extends ParserRuleContext {
-    public TerminalNode NEWLINE() { return getToken(abcBodyParser.NEWLINE, 0); }
+    public EndoflineContext endofline() {
+      return getRuleContext(EndoflineContext.class,0);
+    }
     public List<ElementContext> element() {
       return getRuleContexts(ElementContext.class);
     }
@@ -210,38 +212,8 @@ public class abcBodyParser extends Parser {
     int _la;
     try {
       setState(56);
-      switch (_input.LA(1)) {
-      case T__3:
-      case T__4:
-      case T__5:
-      case T__6:
-      case T__7:
-      case T__8:
-      case T__9:
-      case T__10:
-      case T__11:
-      case T__12:
-      case T__13:
-      case T__14:
-      case T__15:
-      case T__16:
-      case T__17:
-      case T__18:
-      case T__19:
-      case T__20:
-      case T__21:
-      case T__22:
-      case T__23:
-      case T__24:
-      case T__26:
-      case T__27:
-      case T__28:
-      case T__29:
-      case T__30:
-      case T__31:
-      case T__32:
-      case T__33:
-      case NEWLINE:
+      switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
+      case 1:
         enterOuterAlt(_localctx, 1);
         {
         setState(50);
@@ -259,25 +231,23 @@ public class abcBodyParser extends Parser {
           _la = _input.LA(1);
         }
         setState(53);
-        match(NEWLINE);
+        endofline();
         }
         break;
-      case T__34:
+      case 2:
         enterOuterAlt(_localctx, 2);
         {
         setState(54);
         fieldvoice();
         }
         break;
-      case T__35:
+      case 3:
         enterOuterAlt(_localctx, 3);
         {
         setState(55);
         comment();
         }
         break;
-      default:
-        throw new NoViableAltException(this);
       }
     }
     catch (RecognitionException re) {
@@ -1376,8 +1346,8 @@ public class abcBodyParser extends Parser {
       "\2\2\2$\u008d\3\2\2\2&\u0095\3\2\2\2(\u009b\3\2\2\2*,\5\4\3\2+*\3"+
       "\2\2\2,-\3\2\2\2-+\3\2\2\2-.\3\2\2\2./\3\2\2\2/\60\7\2\2\3\60\3\3"+
       "\2\2\2\61\63\5\6\4\2\62\61\3\2\2\2\63\66\3\2\2\2\64\62\3\2\2\2\64"+
-      "\65\3\2\2\2\65\67\3\2\2\2\66\64\3\2\2\2\67;\7)\2\28;\5$\23\29;\5&"+
-      "\24\2:\64\3\2\2\2:8\3\2\2\2:9\3\2\2\2;\5\3\2\2\2<A\5\b\5\2=A\5\32"+
+      "\65\3\2\2\2\65\67\3\2\2\2\66\64\3\2\2\2\67;\5(\25\28;\5$\23\29;\5"+
+      "&\24\2:\64\3\2\2\2:8\3\2\2\2:9\3\2\2\2;\5\3\2\2\2<A\5\b\5\2=A\5\32"+
       "\16\2>A\5 \21\2?A\5\"\22\2@<\3\2\2\2@=\3\2\2\2@>\3\2\2\2@?\3\2\2\2"+
       "A\7\3\2\2\2BE\5\n\6\2CE\5\36\20\2DB\3\2\2\2DC\3\2\2\2E\t\3\2\2\2F"+
       "H\5\f\7\2GI\5\22\n\2HG\3\2\2\2HI\3\2\2\2I\13\3\2\2\2JM\5\16\b\2KM"+

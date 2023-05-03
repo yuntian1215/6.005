@@ -19,7 +19,7 @@ import abc.parser.abcBodyParser.NoteelementContext;
 public class MakeBody implements abcBodyListener {
 	private Stack<Music> stack = new Stack<>();
 	private Stack<Music> repeat = new Stack<>();
-	private Stack<Music> before1st = new Stack<>();
+	private Stack<Music> FirstMusic = new Stack<>();
 	private Music body;
 	private Map<String, Stack<Music>> VMusic = new HashMap<>();
 	private Map<String, Music> allVMusicMap = new HashMap<>();
@@ -28,10 +28,10 @@ public class MakeBody implements abcBodyListener {
 	private static Map<String, Integer> measureAccidentals = new HashMap<>();
 	
 	private boolean inrepeat = true;
-	private boolean altEnding = false;
+	private boolean atEnding = false;
 	private String currentVoice = "Default";
 	
-	public Map<String, Music> getBody(){
+	public Map<String, Music> getBody() {
 		Map<String, Music> MusicBody = new HashMap<>();
 		MusicBody.put("Music", body);
 		return MusicBody;
@@ -144,23 +144,23 @@ public class MakeBody implements abcBodyListener {
 		  
 		  Integer keyTranspose = 0;
 		  
-		  if(measureAccidentals.containsKey(upperbasenote)){
+		  if(measureAccidentals.containsKey(upperbasenote)) {
 			  keyTranspose = measureAccidentals.get(upperbasenote);
 	      }
 		  
-		  if (numAccidentals != null){			  
-			  if (numAccidentals == 0){
+		  if (numAccidentals != null) {			  
+			  if (numAccidentals == 0) {
 				  return 0 + keyTranspose;
-	          }else if (numAccidentals > 0){
+	          }else if (numAccidentals > 0) {
 	        	  for (int i = 0; i < numAccidentals; i++) {
 	        		  if (sharporder[i].equals(upperbasenote)) {
 	        			  return 1 + keyTranspose;
 	        			  }
 	        	  }
-	          }else if (numAccidentals < 0){
+	          }else if (numAccidentals < 0) {
 				  numAccidentals = -1 * numAccidentals;
-				  for (int i = 0; i < numAccidentals; i++){
-					  if (flatorder[i].equals(upperbasenote)){
+				  for (int i = 0; i < numAccidentals; i++) {
+					  if (flatorder[i].equals(upperbasenote)) {
 						  return -1 + keyTranspose;
 	                  }
 	              }
@@ -233,7 +233,7 @@ public class MakeBody implements abcBodyListener {
 	              int numnaturals = countChar(accidental, '=');
 	              int naturalchange = 0;
 	              
-	        	  if(measureAccidentals.containsKey(basenoteString)){
+	        	  if(measureAccidentals.containsKey(basenoteString)) {
 	        		  naturalchange = -1 * measureAccidentals.get(basenoteString);
 	        	  }
 	        	  
@@ -242,11 +242,11 @@ public class MakeBody implements abcBodyListener {
 	        	  /**
 	        	   * Use the transpose effect above
 	        	   */
-	        	  if(measureAccidentals.containsKey(basenoteString.toUpperCase()) && (numflats != 0 || numsharps != 0)){
+	        	  if(measureAccidentals.containsKey(basenoteString.toUpperCase()) && (numflats != 0 || numsharps != 0)) {
 	        		  pitch = pitch.transpose(-1 * measureAccidentals.get(basenoteString));
 	        	  }
 	                
-	        	  if(numnaturals > 0){
+	        	  if(numnaturals > 0) {
 	        		  measureAccidentals.put(basenoteString.toUpperCase(), 0);
 	        	  }
 	        	  else{
@@ -303,28 +303,28 @@ public class MakeBody implements abcBodyListener {
 		   * Triplet: 3 notes in the time of 2 notes
 		   * Quadruplet: 4 notes in the time of 3 notes
 		   */		  
-		  for (NoteelementContext noteelem: noteelems){
+		  for (NoteelementContext noteelem: noteelems) {
 			  Music item = repeat.pop();
-			  if (item.isNote()){
+			  if (item.isNote()) {
 				  Note note = (Note) item;
 				  Note tupletnote;
-				  if (nplet == 3){
+				  if (nplet == 3) {
 					  tupletnote = new Note(note.duration() * 2 / nplet, note.pitch());
-				  }else if (nplet == 2){
+				  }else if (nplet == 2) {
 					  tupletnote = new Note(note.duration() * 3 / nplet, note.pitch());
 				  } else{
 					  tupletnote = new Note(note.duration() * 3 / nplet, note.pitch());
 				  }
 				  tuplets.add(tupletnote);
 				  
-			  }else if (item.isChord()){
+			  }else if (item.isChord()) {
 				  Chord chord = (Chord) item;
 				  List<Note> chordNotes = new ArrayList<Note>();
 				  for (Note note: chord.getNotes()) {
 					  Note tupletnote;
-					  if (nplet == 3){
+					  if (nplet == 3) {
 						  tupletnote = new Note(note.duration() * 2 / nplet, note.pitch());
-					  }else if (nplet == 2){
+					  }else if (nplet == 2) {
 						  tupletnote = new Note(note.duration() * 3 / nplet, note.pitch());
 					  }else{
 						  tupletnote = new Note(note.duration() * 3 / nplet, note.pitch());
@@ -335,7 +335,7 @@ public class MakeBody implements abcBodyListener {
 			  }
 		  }
 		  /**
-		   * Reverse the order because of the nature of the stack
+		   * Reverse the order because of the FILO nature of the stack
 		   */
 		  for (int i = tuplets.size() - 1; i >= tuplets.size()-nplet_t; i--) {
 			  repeat.push(tuplets.get(i));
@@ -355,7 +355,9 @@ public class MakeBody implements abcBodyListener {
 			  Note note = (Note) repeat.pop();
 			  chordNotes.add(note);
 		  }
-		  
+		  /**
+		   * ?????
+		   */
 		  Collections.reverse(chordNotes);    
 		  Chord chord = new Chord(chordNotes);
 		  repeat.push(chord);
@@ -364,125 +366,126 @@ public class MakeBody implements abcBodyListener {
 	  @Override public void enterBarline(abcBodyParser.BarlineContext ctx) { }
 
 	  @Override public void exitBarline(abcBodyParser.BarlineContext ctx) {
-		  if(ctx != null){
+		  if(ctx != null) {
 			  measureAccidentals.clear();
 		  }
 		  
-		  if (ctx.getText().equals("|:") || ctx.getText().equals("[|") || ctx.getText().equals("||") || ctx.getText().equals("|]")){
-			  if(!(VMusic.isEmpty())){
-				  for(int j = 0; j <= repeat.size() - 1; j++){
-					  stack.push(repeat.get(j));
+		  if (ctx.getText().equals("|:") || ctx.getText().equals("[|") || ctx.getText().equals("||") || ctx.getText().equals("|]")) {
+			  if(!(VMusic.isEmpty())) {
+				  for(int i = 0; i <= repeat.size() - 1; i++) {
+					  stack.push(repeat.get(i));
 				  }
 				  
 				  Stack<Music> currentVoiceStack = VMusic.get(currentVoice);
-				  for(int j = 0; j <= stack.size() - 1; j++){
+				  for(int j = 0; j <= stack.size() - 1; j++) {
 					  currentVoiceStack.push(stack.get(j));
 				  }
 				  VMusic.put(currentVoice, currentVoiceStack);
 				  stack = new Stack<>();
 				  
 			  }else{
-				  for(int j = 0; j <= repeat.size() - 1; j++){
-					  stack.push(repeat.get(j));
+				  for(int k = 0; k <= repeat.size() - 1; k++) {
+					  stack.push(repeat.get(k));
 				  }
 			  }
 			  
 			  inrepeat = true;
 			  repeat = new Stack<>();
 	            
-		  }else if(ctx.getText().equals(":|")){
-			  if(repeat.size() > 0 && !(altEnding)){
-				  for (int i = 0; i < 2; i++){
-					  for (int j = 0; j <= repeat.size() - 1; j++){
+		  }else if(ctx.getText().equals(":|")) {
+			  if(repeat.size() > 0 && !(atEnding)) {
+				  for (int i = 0; i < 2; i++) {
+					  for (int j = 0; j <= repeat.size() - 1; j++) {
 						  stack.push(repeat.get(j));
 					  }
 				  }
 				  repeat = new Stack<>();
 			  }
-			  if (altEnding) {
-				  for (int j = 0; j <= repeat.size() - 1; j++) {
-					  stack.push(repeat.get(j));
+			  if(atEnding) {
+				  for(int k = 0; k <= repeat.size() - 1; k++) {
+					  stack.push(repeat.get(k));
 				  }
-				  for (int k = 0; k <= before1st.size() - 1; k++) {
-					  stack.push(before1st.get(k));
+				  for(int l = 0; l <= FirstMusic.size() - 1; l++) {
+					  stack.push(FirstMusic.get(l));
 				  }
 				  repeat = new Stack<>();
-				  before1st = new Stack<>();
-				  altEnding = false;
+				  FirstMusic = new Stack<>();
+				  atEnding = false;
 			  }
 		  }
 	  }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
-	  @Override public void enterNthrepeat(abcBodyParser.NthrepeatContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
-	  @Override public void exitNthrepeat(abcBodyParser.NthrepeatContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
-	  @Override public void enterFieldvoice(abcBodyParser.FieldvoiceContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
-	  @Override public void exitFieldvoice(abcBodyParser.FieldvoiceContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
-	  @Override public void enterComment(abcBodyParser.CommentContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
-	  @Override public void exitComment(abcBodyParser.CommentContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
-	  @Override public void enterEndofline(abcBodyParser.EndoflineContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
-	  @Override public void exitEndofline(abcBodyParser.EndoflineContext ctx) { }
 
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
+	  @Override public void enterNthrepeat(abcBodyParser.NthrepeatContext ctx) { }
+
+	  @Override public void exitNthrepeat(abcBodyParser.NthrepeatContext ctx) {
+		  if(ctx.getText().equals("[1")) {
+			  for(int i = 0; i <= repeat.size(); i++) {
+				  FirstMusic.push(repeat.get(i));
+				  atEnding = true;
+			  }
+		  }else if(ctx.getText().equals("[2")){
+			  atEnding = false;
+		  }
+	  }
+
+	  @Override public void enterFieldvoice(abcBodyParser.FieldvoiceContext ctx) { }
+
+	  @Override public void exitFieldvoice(abcBodyParser.FieldvoiceContext ctx) {
+		  if(currentVoice.equals("Default")) {
+			  if(repeat.size() > 0) {
+				  VMusic.put(currentVoice, repeat);
+				  repeat = new Stack<Music>();
+			  }
+		  }
+		  
+		  currentVoice = ctx.getText();
+		  if(!(VMusic.containsKey(currentVoice))) {
+			  if(repeat.size() > 0) {
+				  VMusic.put(currentVoice, repeat);
+			  }else {
+				  VMusic.put(currentVoice, new Stack<Music>());
+			  }
+		  }else {
+			  Stack<Music> currentVoiceStack = VMusic.get(currentVoice);
+			  
+			  for(int i = 0; i <= repeat.size() - 1; i++) {
+				  currentVoiceStack.push(repeat.get(i));
+			  }
+			  VMusic.put(currentVoice, currentVoiceStack);
+		  }
+		  
+		  repeat = new Stack<Music>();
+		  stack = new Stack<Music>();
+	  }
+
+	  @Override public void enterComment(abcBodyParser.CommentContext ctx) { }
+
+	  @Override public void exitComment(abcBodyParser.CommentContext ctx) { }
+
+	  @Override public void enterEndofline(abcBodyParser.EndoflineContext ctx) { }
+
+	  @Override public void exitEndofline(abcBodyParser.EndoflineContext ctx) {
+		  if(VMusic.isEmpty()) {
+			  for(int i = 0; i <= repeat.size() -1; i++) {
+				  stack.push(repeat.get(i));
+			  }
+			  
+			  Stack<Music> currentVoiceStack = VMusic.get(currentVoice);
+			  for (int j = 0; j <= stack.size() - 1; j++) {
+				  currentVoiceStack.push(stack.get(j));
+			  }
+			  VMusic.put(currentVoice, currentVoiceStack);
+			  repeat = new Stack<Music>();
+			  stack = new Stack<Music>();
+		  }
+	  }
+
+
 	  @Override public void enterEveryRule(ParserRuleContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
+
 	  @Override public void exitEveryRule(ParserRuleContext ctx) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
+
 	  @Override public void visitTerminal(TerminalNode node) { }
-	  /**
-	   * {@inheritDoc}
-	   *
-	   * <p>The default implementation does nothing.</p>
-	   */
+
 	  @Override public void visitErrorNode(ErrorNode node) { }
 }

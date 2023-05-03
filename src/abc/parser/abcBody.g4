@@ -7,7 +7,7 @@ grammar abcBody;
 import Configuration;
 
 root : abcline+ EOF;
-abcline : element* NEWLINE | fieldvoice | comment;
+abcline : element* endofline | fieldvoice | comment;
 element : noteelement | tupletelement | barline | nthrepeat; 
 
 noteelement : note | multinote;
