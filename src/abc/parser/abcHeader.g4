@@ -14,7 +14,7 @@ otherfields : (fieldcomposer | fielddefaultlength | fieldmeter | fieldtempo | fi
 
 fieldcomposer : 'C:' STRING+ ;
 fielddefaultlength : 'L:' DIGIT+ '/' DIGIT+ ;
-fieldmeter : 'M:' 'C' | 'C|' | (DIGIT+ '/' DIGIT+) ;
+fieldmeter : 'M:' ('C' | 'C|' | (DIGIT+ '/' DIGIT+)) ;
 fieldtempo : 'Q:' (DIGIT+ '/' DIGIT+) '=' DIGIT+ ;
 fieldvoice : 'V:' (STRING | DIGIT)+ ;
 

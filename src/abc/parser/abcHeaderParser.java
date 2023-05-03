@@ -178,7 +178,7 @@ public class abcHeaderParser extends Parser {
       setState(35);
       _errHandler.sync(this);
       _la = _input.LA(1);
-      while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__3) | (1L << T__5) | (1L << T__7) | (1L << T__8) | (1L << T__10) | (1L << T__28) | (1L << DIGIT))) != 0)) {
+      while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__3) | (1L << T__5) | (1L << T__8) | (1L << T__10) | (1L << T__28))) != 0)) {
         {
         {
         setState(32);
@@ -392,8 +392,6 @@ public class abcHeaderParser extends Parser {
         }
         break;
       case T__5:
-      case T__7:
-      case DIGIT:
         {
         setState(59);
         fieldmeter();
@@ -585,26 +583,25 @@ public class abcHeaderParser extends Parser {
     enterRule(_localctx, 12, RULE_fieldmeter);
     int _la;
     try {
+      enterOuterAlt(_localctx, 1);
+      {
+      setState(85);
+      match(T__5);
       setState(99);
       switch (_input.LA(1)) {
-      case T__5:
-        enterOuterAlt(_localctx, 1);
+      case T__6:
         {
-        setState(85);
-        match(T__5);
         setState(86);
         match(T__6);
         }
         break;
       case T__7:
-        enterOuterAlt(_localctx, 2);
         {
         setState(87);
         match(T__7);
         }
         break;
       case DIGIT:
-        enterOuterAlt(_localctx, 3);
         {
         {
         setState(89); 
@@ -642,6 +639,7 @@ public class abcHeaderParser extends Parser {
         break;
       default:
         throw new NoViableAltException(this);
+      }
       }
     }
     catch (RecognitionException re) {
@@ -990,7 +988,7 @@ public class abcHeaderParser extends Parser {
       "\n\13\3\f\3\f\3\f\3\f\3\r\3\r\5\r\u008e\n\r\3\r\2\2\16\2\4\6\b\n\f"+
       "\16\20\22\24\26\30\2\6\3\2 !\4\2\t\t\17\33\3\2\33\34\3\2\35\36\u009a"+
       "\2\32\3\2\2\2\4+\3\2\2\2\6\63\3\2\2\2\bA\3\2\2\2\nE\3\2\2\2\fK\3\2"+
-      "\2\2\16e\3\2\2\2\20g\3\2\2\2\22y\3\2\2\2\24\177\3\2\2\2\26\u0087\3"+
+      "\2\2\16W\3\2\2\2\20g\3\2\2\2\22y\3\2\2\2\24\177\3\2\2\2\26\u0087\3"+
       "\2\2\2\30\u008d\3\2\2\2\32\36\5\4\3\2\33\35\5\26\f\2\34\33\3\2\2\2"+
       "\35 \3\2\2\2\36\34\3\2\2\2\36\37\3\2\2\2\37!\3\2\2\2 \36\3\2\2\2!"+
       "%\5\6\4\2\"$\5\b\5\2#\"\3\2\2\2$\'\3\2\2\2%#\3\2\2\2%&\3\2\2\2&(\3"+
@@ -1003,10 +1001,10 @@ public class abcHeaderParser extends Parser {
       "\2\2\2CD\5\30\r\2D\t\3\2\2\2EG\7\5\2\2FH\7!\2\2GF\3\2\2\2HI\3\2\2"+
       "\2IG\3\2\2\2IJ\3\2\2\2J\13\3\2\2\2KM\7\6\2\2LN\7 \2\2ML\3\2\2\2NO"+
       "\3\2\2\2OM\3\2\2\2OP\3\2\2\2PQ\3\2\2\2QS\7\7\2\2RT\7 \2\2SR\3\2\2"+
-      "\2TU\3\2\2\2US\3\2\2\2UV\3\2\2\2V\r\3\2\2\2WX\7\b\2\2Xf\7\t\2\2Yf"+
+      "\2TU\3\2\2\2US\3\2\2\2UV\3\2\2\2V\r\3\2\2\2We\7\b\2\2Xf\7\t\2\2Yf"+
       "\7\n\2\2Z\\\7 \2\2[Z\3\2\2\2\\]\3\2\2\2][\3\2\2\2]^\3\2\2\2^_\3\2"+
       "\2\2_a\7\7\2\2`b\7 \2\2a`\3\2\2\2bc\3\2\2\2ca\3\2\2\2cd\3\2\2\2df"+
-      "\3\2\2\2eW\3\2\2\2eY\3\2\2\2e[\3\2\2\2f\17\3\2\2\2gi\7\13\2\2hj\7"+
+      "\3\2\2\2eX\3\2\2\2eY\3\2\2\2e[\3\2\2\2f\17\3\2\2\2gi\7\13\2\2hj\7"+
       " \2\2ih\3\2\2\2jk\3\2\2\2ki\3\2\2\2kl\3\2\2\2lm\3\2\2\2mo\7\7\2\2"+
       "np\7 \2\2on\3\2\2\2pq\3\2\2\2qo\3\2\2\2qr\3\2\2\2rs\3\2\2\2su\7\f"+
       "\2\2tv\7 \2\2ut\3\2\2\2vw\3\2\2\2wu\3\2\2\2wx\3\2\2\2x\21\3\2\2\2"+

@@ -38,6 +38,10 @@ public class MakeBody implements abcBodyListener {
 		
 	}
 	
+	public Map<String, Music> getAllMusic(){
+		return allVMusicMap;
+	}
+	
 	public void SetHeader(Map<String, String> Musicheader) {
 		header = Musicheader;
 	}
@@ -189,8 +193,11 @@ public class MakeBody implements abcBodyListener {
 				  }else {
 					  duration = Double.valueOf(numbers[0]) / Double.valueOf(numbers[1]);
 				  }
-			  }else {
-				  duration = Double.valueOf(length);
+			  }else if(!length.isEmpty()) {
+
+				  duration = Double.valueOf(length);                                 
+			  }else {                                                                
+				  duration = 1.0;                                                    
 			  }
 		  }else {
 			  duration = 1.0;
@@ -465,7 +472,7 @@ public class MakeBody implements abcBodyListener {
 	  @Override public void enterEndofline(abcBodyParser.EndoflineContext ctx) { }
 
 	  @Override public void exitEndofline(abcBodyParser.EndoflineContext ctx) {
-		  if(VMusic.isEmpty()) {
+		  if(!VMusic.isEmpty()) {
 			  for(int i = 0; i <= repeat.size() -1; i++) {
 				  stack.push(repeat.get(i));
 			  }

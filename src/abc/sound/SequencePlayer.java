@@ -1,6 +1,9 @@
 package abc.sound;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Map;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaEventListener;
@@ -30,6 +33,9 @@ public class SequencePlayer {
     private final Sequencer sequencer;
     private final Track track;
     private final int beatsPerMinute;
+    private final int ticksPerBeat;
+    private final int ticksPerDefaultNote;
+    private final int defaultTicksPerBeat = 128;
 
     /*
      * Rep invariant:
@@ -53,7 +59,10 @@ public class SequencePlayer {
      */
     public SequencePlayer(int beatsPerMinute, int ticksPerBeat)
             throws MidiUnavailableException, InvalidMidiDataException {
-        this.sequencer = MidiSystem.getSequencer();
+        
+    	this.sequencer = MidiSystem.getSequencer();
+        this.ticksPerBeat = ticksPerBeat;
+        this.ticksPerDefaultNote = ticksPerBeat;
 
         // create a sequence object with with tempo-based timing, where
         // the resolution of the time step is based on ticks per beat
@@ -66,6 +75,76 @@ public class SequencePlayer {
         sequencer.setSequence(sequence);
 
         checkRep();
+    }
+    /**
+     * Make a new MIDI sequence player.
+     * 
+     * @param beatsPerMinute the number of beats per minute
+     * @param ticksPerBeat the number of ticks per beat; every note plays for an integer number of ticks
+     * @throws MidiUnavailableException
+     * @throws InvalidMidiDataException
+     */
+    public SequencePlayer(int beatsPerMinute)
+            throws MidiUnavailableException, InvalidMidiDataException {
+        
+    	this.sequencer = MidiSystem.getSequencer();
+        this.ticksPerBeat = defaultTicksPerBeat;
+        this.ticksPerDefaultNote = ticksPerBeat;
+        // create a sequence object with with tempo-based timing, where
+        // the resolution of the time step is based on ticks per beat
+        Sequence sequence = new Sequence(Sequence.PPQ, ticksPerBeat);
+        this.beatsPerMinute = beatsPerMinute;
+
+        // create an empty track; notes will be added to this track
+        this.track = sequence.createTrack();
+        sequencer.setSequence(sequence);
+        checkRep();
+    }
+    
+    /**
+     * Creates sequence player with beats per minute corresponding to input abc music file
+     * 
+     * @param file the abc music file from which the tempo information is extracted
+     * @throws MidiUnavailableException
+     * @throws InvalidMidiDataException
+     * @throws IOException
+     */
+    public SequencePlayer(File file) throws MidiUnavailableException, InvalidMidiDataException, IOException {
+        this.sequencer = MidiSystem.getSequencer();
+        ticksPerBeat = defaultTicksPerBeat;
+        // create a sequence object with with tempo-based timing, where
+        // the resolution of the time step is based on ticks per beat
+        Sequence sequence = new Sequence(Sequence.PPQ, ticksPerBeat);
+        Map<String, String> title = Music.parseHeaderFromFile(file);
+        // the beats per minute is taken from the declared tempo in the header of the abc music file
+        
+        String[] tempoParts= title.get("Q").split("=");
+        String[] lengthParts = title.get("L").split("/");
+        String[] tempoBeats = tempoParts[0].split("/");
+        double regularBeat = Double.valueOf(tempoBeats[0])/Double.valueOf(tempoBeats[1]);
+        double ratio = (Double.valueOf(lengthParts[0])/Double.valueOf(lengthParts[1]))/regularBeat;
+        this.ticksPerDefaultNote = (int)(defaultTicksPerBeat*ratio);
+        this.beatsPerMinute = Integer.parseInt(tempoParts[1]);
+        // create an empty track; notes will be added to this track
+        this.track = sequence.createTrack();
+        sequencer.setSequence(sequence);
+        checkRep();
+    }
+    
+    /**
+     * Get the number of ticks per beat declared for this Sequence Player
+     * @return int number of ticks per beat
+     */
+    public int getTicks() {
+        return ticksPerBeat;
+    }
+    
+    /**
+     * Get the number of ticks per default note declared for this Sequence Player
+     * @return int number of ticks per default note
+     */
+    public int getTicksDefaultNote() {
+        return ticksPerDefaultNote;
     }
 
     /**
