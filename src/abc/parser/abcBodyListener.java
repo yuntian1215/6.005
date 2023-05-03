@@ -191,16 +191,6 @@ public interface abcBodyListener extends ParseTreeListener {
    */
   void exitFieldvoice(abcBodyParser.FieldvoiceContext ctx);
   /**
-   * Enter a parse tree produced by {@link abcBodyParser#comment}.
-   * @param ctx the parse tree
-   */
-  void enterComment(abcBodyParser.CommentContext ctx);
-  /**
-   * Exit a parse tree produced by {@link abcBodyParser#comment}.
-   * @param ctx the parse tree
-   */
-  void exitComment(abcBodyParser.CommentContext ctx);
-  /**
    * Enter a parse tree produced by {@link abcBodyParser#endofline}.
    * @param ctx the parse tree
    */

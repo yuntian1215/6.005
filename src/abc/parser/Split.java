@@ -24,9 +24,9 @@ public class Split{
 				header += line;
 			}
 			else if(isHead) {
-				header += line + "\r\n";
+				header += line + "\n";
 			}else {
-				body += line + "\r\n";
+				body += line + "\n";
 			}
 		}
 		

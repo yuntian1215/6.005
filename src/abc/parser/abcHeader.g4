@@ -18,8 +18,9 @@ fieldmeter : 'M:' ('C' | 'C|' | (DIGIT+ '/' DIGIT+)) ;
 fieldtempo : 'Q:' (DIGIT+ '/' DIGIT+) '=' DIGIT+ ;
 fieldvoice : 'V:' (STRING | DIGIT)+ ;
 
-fieldkey : 'K:' ('C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B'
-        | 'c' | 'd' | 'e' | 'f' | 'g' | 'a' | 'b') ('#'|'b')? ('M' | 'm')? ;
+fieldkey : KEY;
+
+KEY: 'K:' ([A-G]|[a-g]) ('#'|'b')? ('M' | 'm')?;
 
 
 

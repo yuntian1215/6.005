@@ -235,18 +235,6 @@ public class abcBodyBaseListener implements abcBodyListener {
    *
    * <p>The default implementation does nothing.</p>
    */
-  @Override public void enterComment(abcBodyParser.CommentContext ctx) { }
-  /**
-   * {@inheritDoc}
-   *
-   * <p>The default implementation does nothing.</p>
-   */
-  @Override public void exitComment(abcBodyParser.CommentContext ctx) { }
-  /**
-   * {@inheritDoc}
-   *
-   * <p>The default implementation does nothing.</p>
-   */
   @Override public void enterEndofline(abcBodyParser.EndoflineContext ctx) { }
   /**
    * {@inheritDoc}

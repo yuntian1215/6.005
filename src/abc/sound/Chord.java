@@ -55,10 +55,14 @@ public class Chord implements Music{
      * Play this chord.
      */
     public void play(SequencePlayer player, double atBeat) {
+    	int ticksPerBeat = player.getTicksDefaultNote();
+    	int noteTicksDuration = (int) (duration() * ticksPerBeat);
+    	
     	Iterator<Note> iterator = notes.iterator();
     	while(iterator.hasNext()) {
     		Note note = iterator.next();
-    		player.addNote(note.pitch().toMidiNote(), (int)atBeat, (int)duration);
+    		int thisNoteDuration = (int) (note.duration() * ticksPerBeat);
+    		player.addNote(note.pitch().toMidiNote(), (int)atBeat, (int)thisNoteDuration);
     	}
     }
     
@@ -118,5 +122,13 @@ public class Chord implements Music{
     	return true;
     }
 	
-	
+    @Override
+    public Chord transpose(int semitonesUp) {
+        List<Note> notesCopy = new ArrayList<Note>(notes);
+        for (Note note : notesCopy) {
+            note = note.transpose(semitonesUp);
+        }
+        checkRep();
+        return new Chord(notesCopy);
+    }
 }

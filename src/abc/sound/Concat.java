@@ -36,14 +36,14 @@ public class Concat implements Music {
      * @return first piece in this concatenation
      */
     public Music first() {
-        return first;
+        return this.first;
     }
     
     /**
      * @return second piece in this concatenation
      */
     public Music second() {
-        return second;
+        return this.second;
     }
     
     /**
@@ -58,7 +58,8 @@ public class Concat implements Music {
      */
     public void play(SequencePlayer player, double atBeat) {
         first.play(player, atBeat);
-        second.play(player, atBeat + first.duration());
+        int secondBeat = (int) (atBeat + first.duration() * player.getTicksDefaultNote());
+        second.play(player, atBeat + secondBeat);
     }
 
     @Override
@@ -90,5 +91,11 @@ public class Concat implements Music {
     @Override
     public boolean isChord() {
     	return false;
+    }
+    
+    @Override
+    public abc.sound.Music transpose(int semitonesUp) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -6,40 +6,44 @@
 grammar abcBody;
 import Configuration;
 
-root : abcline+ EOF;
-abcline : element* endofline | fieldvoice | comment;
-element : noteelement | tupletelement | barline | nthrepeat; 
+root : (abcline)+ EOF;
+abcline : (element)+ endofline | fieldvoice | COMMENT;
+element : noteelement | tupletelement | barline | nthrepeat | WHITESPACE; 
 
 noteelement : note | multinote;
 
 note : noteorrest notelength?;
 noteorrest : pitch | rest;
 pitch : accidental? basenote octave?;
-octave : '\''+ | ','+;
-notelength : (DIGIT+)? ('/' (DIGIT+)?)?;
+octave: OCTAVE;
+notelength: NOTELENGTH;
 
-accidental : '^' | '^^' | '_' | '__' | '=';
-
-basenote : 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B'
-        | 'c' | 'd' | 'e' | 'f' | 'g' | 'a' | 'b';
+accidental: ACCIDENTAL;
+basenote: BASENOTE;
 
 rest : 'z';
 
 tupletelement : tupletspec noteelement+;
-tupletspec : '(' DIGIT; 
+tupletspec : TUPLETSPEC;
 
 
 multinote : '[' note+ ']';
 
-barline : '|' | '||' | '[|' | '|]' | ':|' | '|:';
-nthrepeat : '[1' | '[2';
+barline : '|'|'||'|'[|'|'|]'|':|'|'|:';
+nthrepeat : NTHREPEAT;
 
-fieldvoice : 'V:' (STRING | DIGIT)+ endofline;
+fieldvoice : BODYVOICE;
 
-comment : '%' STRING NEWLINE;
-endofline : comment | NEWLINE;
+TUPLETSPEC: '(' [0-9];
+NTHREPEAT: '[1'|'[2';
+NOTELENGTH: ([0-9]+)? ('/' ([0-9]+)?)?;
+BODYVOICE: ('V: '|'V:') ([A-Za-z.0-9])+ ('\n' | '\r'('\n')?);
+COMMENT: '%' ([A-Za-z.])* ('\n' | '\r'('\n')?);
+endofline : NEWLINE;
 
+ACCIDENTAL:  '^'|'^^'|'_'|'__'|'=';
+BASENOTE: ('C'|'D'|'E'|'F'|'G'|'A'|'B'|'c'|'d'|'e'|'f'|'g'|'a'|'b');
+OCTAVE: '\''+ | ','+;
 DIGIT : [0-9];
-STRING: [a-zA-Z'\'''\.'',']+;
 NEWLINE : '\n' | '\r' '\n'?;
-SPACES : [ ]+ -> skip;
+WHITESPACE: ' ' | '\t';

@@ -32,7 +32,7 @@ public class Rest implements Music {
      * @return duration of this rest
      */
     public double duration() {
-        return duration;
+        return this.duration;
     }
     
     /**
@@ -71,5 +71,12 @@ public class Rest implements Music {
     @Override
     public boolean isChord() {
     	return false;
+    }
+    
+    @Override
+    public Music transpose(int semitonesUp) {
+        Rest restCopy = new Rest(this.duration);
+        checkRep();
+        return restCopy;
     }
 }

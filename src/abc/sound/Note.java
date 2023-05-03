@@ -50,7 +50,9 @@ public class Note implements Music {
      * Play this note.
      */
     public void play(SequencePlayer player, double atBeat) {
-        player.addNote(pitch.toMidiNote(), (int)atBeat, (int)duration);
+    	int ticksPerBeat = player.getTicksDefaultNote();
+        int newDuration = (int) (this.duration * ticksPerBeat);
+        player.addNote(pitch.toMidiNote(), (int)atBeat, (int)newDuration);
     }
 
     @Override
@@ -84,5 +86,11 @@ public class Note implements Music {
     @Override
     public boolean isChord() {
     	return false;
+    }
+    
+    @Override
+    public Note transpose(int semitonesUp) {
+        Pitch newPitch = this.pitch.transpose(semitonesUp);
+        return new Note(this.duration, newPitch);
     }
 }

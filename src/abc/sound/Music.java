@@ -94,33 +94,7 @@ public interface Music{
 		return parseBody(new String(body), parseHeader(new String(header)));
 	}
     
-    public static void main() throws IOException, MidiUnavailableException, InvalidMidiDataException {
-    	File file = new File("sample_abc/invention.abc");
-        List<String> headbody = Split.SplitHeader(file);
-        
-        System.out.println(headbody.get(1));
-        Map<String, String> header = parseHeader(headbody.get(0));
-        System.out.println(header);
-        Map<String, Music> body = parseBody(headbody.get(1),header);
-        System.out.println(body);
-        
-        SequencePlayer player = new SequencePlayer(file);
-        double voicedelay = 0;
-        
-        if(body.keySet().contains("Default")) {
-            Music defaultvoice = body.get("Default");
-            defaultvoice.play(player, 0);
-            voicedelay = defaultvoice.duration() * player.getTicksDefaultNote();
-        }
-        
-        for(String key: body.keySet()) {
-            if(!key.equals("Default")) {
-            	body.get(key).play(player, voicedelay);
-            }
-        }
-        player.play();
-    }
-
+    public Music transpose(int semitonesUp);
     
 	
 }
