@@ -8,7 +8,7 @@ import Configuration;
 
 root : (abcline)+ EOF;
 abcline : (element)+ endofline | fieldvoice | COMMENT;
-element : noteelement | tupletelement | barline | nthrepeat | WHITESPACE; 
+element : noteelement | tupletelement | barline | nthrepeat; 
 
 noteelement : note | multinote;
 
@@ -46,4 +46,4 @@ BASENOTE: ('C'|'D'|'E'|'F'|'G'|'A'|'B'|'c'|'d'|'e'|'f'|'g'|'a'|'b');
 OCTAVE: '\''+ | ','+;
 DIGIT : [0-9];
 NEWLINE : '\n' | '\r' '\n'?;
-WHITESPACE: ' ' | '\t';
+SPACES : [ ]+ -> skip;
