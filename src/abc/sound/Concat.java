@@ -81,4 +81,14 @@ public class Concat implements Music {
     public String toString() {
         return first + " " + second;
     }
+    
+    @Override
+    public boolean isNote() {
+    	return false;
+    }
+    
+    @Override
+    public boolean isChord() {
+    	return false;
+    }
 }

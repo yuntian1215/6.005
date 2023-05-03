@@ -62,4 +62,14 @@ public class Rest implements Music {
     public String toString() {
         return "." + duration;
     }
+    
+    @Override
+    public boolean isNote() {
+    	return false;
+    }
+    
+    @Override
+    public boolean isChord() {
+    	return false;
+    }
 }

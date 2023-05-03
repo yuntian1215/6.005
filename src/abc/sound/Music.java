@@ -11,13 +11,18 @@ public interface Music{
 	/**
      * @return total duration of this piece in beats
      */
-    double duration();
+    public double duration();
     
     /**
      * Play this piece.
      * @param player player to play on
      * @param atBeat when to play
      */
-    void play(SequencePlayer player, double atBeat);
+    public void play(SequencePlayer player, double atBeat);
+    
+    public boolean isNote();
+    
+    public boolean isChord();
+    
 	
 }

@@ -2,6 +2,7 @@ package abc.sound;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +38,11 @@ public class Chord implements Music{
 		this.duration = notes.get(0).duration();
 		checkRep();
 	}
+	
+	public List<Note> getNotes() {
+        List<Note> copyNotes = new ArrayList<Note>(notes);
+        return copyNotes;
+    }
 	
 	/**
      * @return duration of this chord
@@ -100,6 +106,16 @@ public class Chord implements Music{
     	
     	s += "]";
     	return s;
+    }
+    
+    @Override
+    public boolean isNote() {
+    	return false;
+    }
+    
+    @Override
+    public boolean isChord() {
+    	return true;
     }
 	
 	
